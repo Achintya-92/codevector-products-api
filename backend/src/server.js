@@ -43,5 +43,7 @@ mongoose
     console.error("DB Connection Error:", err);
   });
 
-app.use("/api/products", productRoutes);
+app.use("api/products",(req,res)=>{
+    console.log(req);
+}, productRoutes);
 
