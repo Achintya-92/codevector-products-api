@@ -1,21 +1,25 @@
 import express from "express";
 import mongoose from "mongoose";
 import dotenv from "dotenv";
+import productRoutes from "./routes/productRoutes.js";
+import cors from "cors";
 
 dotenv.config();
 
 const app = express();
 
+app.use(
+  cors({
+    origin: [
+      "http://localhost:5173",
+      "https://your-frontend.onrender.com"
+    ]
+  })
+);
+
 app.use(express.json());
 
-console.log(process.env.MONGO_URI);
-
 const PORT = process.env.PORT || 5000;
-
-import productRoutes from "./routes/productRoutes.js";
-
-
-
 
 // Test Route
 app.get("/", (req, res) => {
@@ -40,3 +44,4 @@ mongoose
   });
 
 app.use("/api/products", productRoutes);
+
