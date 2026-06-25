@@ -1,8 +1,9 @@
 import express from "express";
 import mongoose from "mongoose";
 import dotenv from "dotenv";
-import productRoutes from "./routes/productRoutes.js";
 import cors from "cors";
+import productRoutes from "./routes/productRoutes.js";
+import seedsRoutes from "./routes/seedsRoutes";
 
 dotenv.config();
 
@@ -43,7 +44,6 @@ mongoose
     console.error("DB Connection Error:", err);
   });
 
-app.use("api/products",(req,res)=>{
-    console.log(req);
-}, productRoutes);
+app.use("api/products", productRoutes);
 
+app.use("api/product", seedsRoutes);

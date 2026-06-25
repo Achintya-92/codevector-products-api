@@ -18,8 +18,9 @@ function App() {
       }
 
       const res = await fetch(url);
+      console.log(res);
       const data = await res.json();
-
+console.log(data);
       setProducts(data.products || []);
     } catch (err) {
       console.error(err);
