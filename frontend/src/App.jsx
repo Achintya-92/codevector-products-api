@@ -10,26 +10,30 @@ function App() {
   const [cursor, serCursor] = useState(null);
   const [productId, setProductId] = useState(null);
 
+  function buildUrl({category,cursor,productId}){
+    let url=null;
+    if(category){
+      url+=`?${category}`;
+    }
+    if(cursor!=null && productId!=null){
+      url+=`&${cursor}&${productId}`;
+    }
+    return url;
+  }
   const fetchProducts = async () => {
     try {
-      setLoading(true);
-      let url = API_URL;
-      if (category) {
-        url += `?category=${category}`;
-      }
-
-      console.log(cusor, productId);
-      if (cursor !== null && productId !== null) {
-        url += `&cusor=${cursor}&productId=${productId}`;
-      }
-      console.log(url);
+      let url = buildUrl(category,cursor,productId);
       const res = await fetch(url);
+      if(!res.ok){
+        throw new Error("failed to fetch Products");
+      }
       console.log(res);
       const data = await res.json();
       console.log(data);
       setCursor(data?.NextCursor?.cursor);
       setItem(data?.NextCursor?.productId);
       setProducts((prev) => [...prev, ...data.products]);
+
     } catch (err) {
       console.error(err);
     } finally {
@@ -41,11 +45,22 @@ function App() {
     fetchProducts();
   }, [category]);
 
+ const resetPagination = () => {
+  setProductId(null);
+  setCursor(null);
+  setProducts([]);
+ }
+
+ const handelCategoryChange=(e)=>{
+  resetPagination();
+  setCategory(e.target.value);
+ }
+
   return (
     <div style={{ padding: "20px", maxWidth: "1200px", margin: "auto" }}>
       <h1>Products Browser</h1>
 
-      <select value={category} onChange={(e) => setCategory(e.target.value)}>
+      <select value={category} onChange={handelCategoryChange}>
         <option value="">All Categories</option>
         <option value="Electronics">Electronics</option>
         <option value="Books">Books</option>
@@ -64,7 +79,7 @@ function App() {
           marginTop: "20px",
         }}
       >
-        {products.map((product) => (
+        {products?.map((product) => (
           <div
             key={product._id}
             style={{
@@ -81,7 +96,7 @@ function App() {
         ))}
       </div>
 <button onClick={fetchProducts}>
-  Load More
+  {loading ? "Loading...":"Load More"}
 </button>
     </div>
   );
