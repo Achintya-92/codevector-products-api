@@ -10,7 +10,7 @@ const  MONGO_URI = process.env.MONGO_URI;
 const router = express.Router();
 
 // Get Products
-router.get("/seeds", async (req, res) => {
+router.post("/seeds", async (req, res) => {
 const categories = [
   "Electronics",
   "Books",
@@ -48,11 +48,16 @@ const categories = [
       console.log(`${i + batchSize} products inserted`);
     }
 
-    console.log("200,000 products inserted successfully");
-    process.exit();
+    res.json({
+  success: true,
+  message: "200000 products inserted"
+});
+
   } catch (error) {
-    console.error(error);
-    process.exit(1);
+   res.status(500).json({
+  success: false,
+  error: error.message
+});
   }
 });
 
