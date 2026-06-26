@@ -1,27 +1,35 @@
 import { useEffect, useState } from "react";
 
-const API_URL = "https://codevector-products-api-oqhm.onrender.com/api/products";
+const API_URL =
+  "https://codevector-products-api-oqhm.onrender.com/api/products";
 
 function App() {
   const [products, setProducts] = useState([]);
   const [category, setCategory] = useState("");
   const [loading, setLoading] = useState(false);
+  const [cursor, serCursor] = useState(null);
+  const [productId, setProductId] = useState(null);
 
   const fetchProducts = async () => {
     try {
       setLoading(true);
-
       let url = API_URL;
-
       if (category) {
         url += `?category=${category}`;
       }
 
+      console.log(cusor, productId);
+      if (cursor !== null && productId !== null) {
+        url += `&cusor=${cursor}&productId=${productId}`;
+      }
+      console.log(url);
       const res = await fetch(url);
       console.log(res);
       const data = await res.json();
-console.log(data);
-      setProducts(data.products || []);
+      console.log(data);
+      setCursor(data?.NextCursor?.cursor);
+      setItem(data?.NextCursor?.productId);
+      setProducts((prev) => [...prev, ...data.products]);
     } catch (err) {
       console.error(err);
     } finally {
@@ -37,10 +45,7 @@ console.log(data);
     <div style={{ padding: "20px", maxWidth: "1200px", margin: "auto" }}>
       <h1>Products Browser</h1>
 
-      <select
-        value={category}
-        onChange={(e) => setCategory(e.target.value)}
-      >
+      <select value={category} onChange={(e) => setCategory(e.target.value)}>
         <option value="">All Categories</option>
         <option value="Electronics">Electronics</option>
         <option value="Books">Books</option>
@@ -71,12 +76,13 @@ console.log(data);
             <h3>{product.name}</h3>
             <p>Category: {product.category}</p>
             <p>₹{product.price}</p>
-            <small>
-              {new Date(product.updatedAt).toLocaleDateString()}
-            </small>
+            <small>{new Date(product.updatedAt).toLocaleDateString()}</small>
           </div>
         ))}
       </div>
+<button onClick={fetchProducts}>
+  Load More
+</button>
     </div>
   );
 }

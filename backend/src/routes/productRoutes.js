@@ -1,18 +1,36 @@
 import express from "express";
 import Product from "../models/db.js";
+import mongoose from "mongoose";
 
 
 const router = express.Router();
 router.get("/", async (req, res) => {
   try {
-    const { category } = req.query;
+   const { category, cursor, productId } = req.query;
     const filter = {};
 if (category) {
   filter.category = category;
 }
+
+if(cursor && productId){
+    filter.$or = [
+        {
+            updatedAt:{
+                $lt : new Date(cursor),
+            },
+        },
+          
+        {
+            updatedAt: new Date(cursor),
+            _id:{
+                $lt: new mongoose.Types.ObjectId(productId),
+            }
+        }
+    ]
+}
     const products = await Product.find(filter)
       .sort({ updatedAt:-1, _id:-1})
-      .skip(20).limit(20)
+      .limit(20)
 
     res.status(200).json({
       success: true,
