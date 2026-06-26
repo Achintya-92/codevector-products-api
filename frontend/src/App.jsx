@@ -7,22 +7,32 @@ function App() {
   const [products, setProducts] = useState([]);
   const [category, setCategory] = useState("");
   const [loading, setLoading] = useState(false);
-  const [cursor, serCursor] = useState(null);
+ const [cursor, setCursor] = useState(null);
   const [productId, setProductId] = useState(null);
 
-  function buildUrl({category,cursor,productId}){
-    let url=null;
-    if(category){
-      url+=`?${category}`;
-    }
-    if(cursor!=null && productId!=null){
-      url+=`&${cursor}&${productId}`;
-    }
-    return url;
+ function buildUrl({ category, cursor, productId }) {
+  const params = new URLSearchParams();
+
+  if (category) {
+    params.append("category", category);
   }
+
+  if (cursor && productId) {
+    params.append("cursorDate", cursor);
+    params.append("cursorId", productId);
+  }
+
+  return `${API_URL}?${params.toString()}`;
+}
+
   const fetchProducts = async () => {
     try {
-      let url = buildUrl(category,cursor,productId);
+      let url = buildUrl({
+  category,
+  cursor,
+  productId,
+});
+setLoading(true);
       const res = await fetch(url);
       if(!res.ok){
         throw new Error("failed to fetch Products");
@@ -30,8 +40,11 @@ function App() {
       console.log(res);
       const data = await res.json();
       console.log(data);
+      console.log("Current Cursor:", cursor);
+console.log("Current ProductId:", productId);
+console.log("Request URL:", url);
       setCursor(data?.NextCursor?.cursor);
-      setItem(data?.NextCursor?.productId);
+      setProductId(data?.NextCursor?.productId);
       setProducts((prev) => [...prev, ...data.products]);
 
     } catch (err) {
@@ -51,7 +64,7 @@ function App() {
   setProducts([]);
  }
 
- const handelCategoryChange=(e)=>{
+ const handleCategoryChange=(e)=>{
   resetPagination();
   setCategory(e.target.value);
  }
@@ -60,7 +73,7 @@ function App() {
     <div style={{ padding: "20px", maxWidth: "1200px", margin: "auto" }}>
       <h1>Products Browser</h1>
 
-      <select value={category} onChange={handelCategoryChange}>
+      <select value={category} onChange={handleCategoryChange}>
         <option value="">All Categories</option>
         <option value="Electronics">Electronics</option>
         <option value="Books">Books</option>
@@ -95,7 +108,7 @@ function App() {
           </div>
         ))}
       </div>
-<button onClick={fetchProducts}>
+<button onClick={fetchProducts} disabled={loading}>
   {loading ? "Loading...":"Load More"}
 </button>
     </div>

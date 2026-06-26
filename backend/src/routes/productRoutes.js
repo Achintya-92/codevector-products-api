@@ -32,10 +32,23 @@ if(cursor && productId){
       .sort({ updatedAt:-1, _id:-1})
       .limit(20)
 
+    let NextCursor = null;
+
+if (products.length > 0) {
+
+   const last = products[products.length - 1];
+
+   NextCursor = {
+      cursor: last.updatedAt,
+      productId: last._id
+   };
+
+}
     res.status(200).json({
       success: true,
       count: products.length,
       products,
+      NextCursor
     });
   } catch (error) {
     res.status(500).json({
