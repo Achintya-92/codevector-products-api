@@ -13,7 +13,7 @@ app.use(
   cors({
     origin: [
       "http://localhost:5173",
-      "https://frontend.onrender.com"
+      "https://codevector-products-api.vercel.app/"
     ]
   })
 );
