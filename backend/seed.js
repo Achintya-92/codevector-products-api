@@ -45,9 +45,8 @@ export async function seedProducts() {
     }
 
     console.log("200,000 products inserted successfully");
-    process.exit();
   } catch (error) {
     console.error(error);
-    process.exit(1);
+
   }
 }
