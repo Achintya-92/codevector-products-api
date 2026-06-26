@@ -14,14 +14,13 @@ const categories = [
   "Home",
 ];
 
-async function seedProducts() {
+export async function seedProducts() {
   try {
     await mongoose.connect(MONGO_URI);
     console.log("MongoDB Connected");
 
     const batchSize = 5000;
     const totalProducts = 200000;
-
     for (let i = 0; i < totalProducts; i += batchSize) {
       const products = [];
 
@@ -52,5 +51,3 @@ async function seedProducts() {
     process.exit(1);
   }
 }
-
-seedProducts();

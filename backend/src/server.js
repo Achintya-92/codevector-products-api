@@ -3,8 +3,8 @@ import mongoose from "mongoose";
 import dotenv from "dotenv";
 import cors from "cors";
 import productRoutes from "./routes/productRoutes.js";
-import seedsRoutes from "./routes/seedsRoutes.js";
-
+import { seedProducts } from "../seed.js";
+import Product from "./models/db.js";
 dotenv.config();
 
 const app = express();
@@ -33,8 +33,16 @@ app.get("/", (req, res) => {
 // MongoDB Connection
 mongoose
   .connect(process.env.MONGO_URI)
-  .then(() => {
+  .then(async () => {
     console.log("MongoDB Connected");
+
+const count = await Product.countDocuments();
+console.log(count);
+
+if (count == 0) {
+  console.log("Seeding database...");
+  await seedProducts();
+}
 
     app.listen(PORT, () => {
       console.log(`Server running on port ${PORT}`);
@@ -44,6 +52,5 @@ mongoose
     console.error("DB Connection Error:", err);
   });
 
-app.use("/api/products", productRoutes);
 
-app.use("/api/product", seedsRoutes);
+app.use("/api/products", productRoutes);

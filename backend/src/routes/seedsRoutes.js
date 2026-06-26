@@ -22,24 +22,22 @@ const categories = [
     await mongoose.connect(MONGO_URI);
     console.log("MongoDB Connected");
 
-    const batchSize = 5000;
-    const totalProducts = 200000;
+    const batchSize = 50;
+    const totalProducts = 200;
 
     for (let i = 0; i < totalProducts; i += batchSize) {
       const products = [];
 
       for (let j = 0; j < batchSize; j++) {
-        const randomDate = new Date(
-          Date.now() - Math.floor(Math.random() * 365 * 24 * 60 * 60 * 1000)
-        );
+        const randDate = new Date(Date.now() - Math.floor(Math.random() * 365 * 24 * 60 * 60 * 1000));
 
         products.push({
           name: `Product ${i + j + 1}`,
           category:
             categories[Math.floor(Math.random() * categories.length)],
           price: Math.floor(Math.random() * 10000) + 100,
-          createdAt: randomDate,
-          updatedAt: randomDate,
+          createdAt: randDate,
+          updatedAt: randDate,
         });
       }
 
