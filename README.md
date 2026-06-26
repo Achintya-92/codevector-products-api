@@ -15,15 +15,15 @@ The React Compiler is not enabled on this template because of its impact on dev 
 
 If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
 
+---------------
 Project Title:
--------------
 This project is a backend logic focused application which works for serving filetered and new product in every loading in otherhand not gives already seen product categories.
 this is designed for dynamic data updates while maintaining 
 consistent pagination results.
 It uses cursor-based pagination.
-==================================================
+
+----------------------
 Features:
----------
 RESTfull API architecture.
 Optimized database queries using MongoDB Indexes.
 Batch based seeding of data products in amount of 200k.
