@@ -12,7 +12,7 @@ if (category) {
 }
     const products = await Product.find(filter)
       .sort({ updatedAt:-1, _id:-1})
-      .limit(20);
+      .limit(50);
 
     res.status(200).json({
       success: true,
