@@ -64,7 +64,6 @@ src/server.js - server entry ponit
 seed.js - Generates Products in Batches (5000) and in Amount of 200k
 frontend/- react ui
 
-=======================================
 
 API EndPoints
 -------------
@@ -104,7 +103,7 @@ Example Request
 /api/products?category=Books
 /api/products?cursorDate=...&cursorId=...
 
-============================================
+
 Indexing Strategy
 -----------------
 .Compound index on updatedAt and _id for efficient sorting.
@@ -127,8 +126,6 @@ Inserts data in batches.
 Uses insertMany() for better performance.
 Supports easy database initialization.
 
-
-============================================
 Installation
 -------------------------
 Clone Repository
