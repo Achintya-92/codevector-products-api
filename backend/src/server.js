@@ -13,8 +13,9 @@ app.use(
   cors({
     origin: [
       "http://localhost:5173",
-      "https://codevector-products-api.vercel.app/"
-    ]
+      "https://codevector-products-api.vercel.app"
+    ],
+    methods: ["GET", "POST"],
   })
 );
 
