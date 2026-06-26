@@ -7,6 +7,7 @@ const router = express.Router();
 router.get("/", async (req, res) => {
   try {
    const { category, cursor, productId } = req.query;
+   console.log( category, cursor, productId);
     const filter = {};
 if (category) {
   filter.category = category;
@@ -31,7 +32,8 @@ if(cursor && productId){
     const products = await Product.find(filter)
       .sort({ updatedAt:-1, _id:-1})
       .limit(20)
-
+console.log(products.map(p => p._id.toString()));
+console.log(filter);
     let NextCursor = null;
 
 if (products.length > 0) {

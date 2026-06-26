@@ -149,14 +149,10 @@ Start the Express server.
 Run seed script if database is empty.
 Deployment
 
-Backend
+Backend ON:
 
 Render
 
-Database
+Database On:
 
 MongoDB Atlas
-
-Frontend
-
-Vercel (Optional)

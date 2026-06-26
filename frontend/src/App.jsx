@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 
 const API_URL =
-  "https://codevector-products-api-oqhm.onrender.com/api/products";
+  "http://localhost:5000/api/products";
 
 function App() {
   const [products, setProducts] = useState([]);
@@ -11,6 +11,8 @@ function App() {
   const [productId, setProductId] = useState(null);
 
  function buildUrl({ category, cursor, productId }) {
+  let url = API_URL;
+
   const params = new URLSearchParams();
 
   if (category) {
@@ -18,33 +20,33 @@ function App() {
   }
 
   if (cursor && productId) {
-    params.append("cursorDate", cursor);
-    params.append("cursorId", productId);
+    params.append("cursor", cursor);
+    params.append("productId", productId);
   }
 
-  return `${API_URL}?${params.toString()}`;
+  return `${url}?${params.toString()}`;
 }
 
   const fetchProducts = async () => {
+setLoading(true);
     try {
       let url = buildUrl({
   category,
   cursor,
   productId,
 });
-setLoading(true);
       const res = await fetch(url);
       if(!res.ok){
         throw new Error("failed to fetch Products");
       }
       console.log(res);
       const data = await res.json();
-      console.log(data);
+      console.log(data.NextCursor);
       console.log("Current Cursor:", cursor);
 console.log("Current ProductId:", productId);
 console.log("Request URL:", url);
-      setCursor(data?.NextCursor?.cursor);
-      setProductId(data?.NextCursor?.productId);
+      setCursor(data.NextCursor?.cursor);
+      setProductId(data.NextCursor?.productId);
       setProducts((prev) => [...prev, ...data.products]);
 
     } catch (err) {
@@ -116,3 +118,5 @@ console.log("Request URL:", url);
 }
 
 export default App;
+
+
